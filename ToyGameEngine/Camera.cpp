@@ -3,6 +3,7 @@
 #include <glm\ext.hpp>
 
 #define ASPECT_RATIO 16.0f/9.0f
+#define MOUSE_SPEED 1.0f
 
 Camera::Camera(glm::vec3 pos, float fov, float h_angle, float v_angle)
 {
@@ -37,10 +38,15 @@ void Camera::calculate_matricies() {
 	projection_matrix = glm::perspective(glm::radians(field_of_view), ASPECT_RATIO, 0.1f, 100.0f);
 
 	view_matrix = glm::lookAt(
-		position,           // Camera is here
+		position,             // Camera is here
 		position + direction, // and looks here : at the same position, plus "direction"
-		up                  // Head is up (set to 0,-1,0 to look upside-down)
+		up                    // Head is up (set to 0,-1,0 to look upside-down)
 	);
+}
+
+void Camera::mouse_position_changed(double xpos, double ypos, double prev_xpos, double prev_ypos) {
+	horizontal_angle += MOUSE_SPEED * (xpos - prev_xpos);
+	vertical_angle   += MOUSE_SPEED * (ypos - prev_ypos);
 }
 
 

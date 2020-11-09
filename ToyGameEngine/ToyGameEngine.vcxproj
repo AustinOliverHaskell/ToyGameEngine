@@ -167,6 +167,13 @@
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\shaders\lightShader.fragmentshader" />
+    <None Include="..\shaders\lightShader.vertexshader" />
+    <None Include="..\shaders\SimpleFragmentShader.fragmentshader" />
+    <None Include="..\shaders\SimpleTransform.vertexshader" />
+    <None Include="..\shaders\SimpleVertexShader.vertexshader" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

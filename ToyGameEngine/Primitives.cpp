@@ -1,45 +1,9 @@
 #include "Primitives.h"
+#include "Util.h"
 
-static const GLfloat CubeVerticies[] = {
-    -1.0f,-1.0f,-1.0f,
-    -1.0f,-1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f, 
-    1.0f, 1.0f,-1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    -1.0f,-1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f,-1.0f,
-    -1.0f, 1.0f,-1.0f,
-    1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f
-};
+Cube::Cube(glm::vec3 position, glm::vec3 scale, glm::mat4 transform, int shader, int id) {
 
-static const GLfloat CubeColors[] = {
+    GLfloat CubeColors[] = {
     0.583f,  0.771f,  0.014f,
     0.609f,  0.115f,  0.436f,
     0.327f,  0.483f,  0.844f,
@@ -76,9 +40,46 @@ static const GLfloat CubeColors[] = {
     0.673f,  0.211f,  0.457f,
     0.820f,  0.883f,  0.371f,
     0.982f,  0.099f,  0.879f
-};
+    };
 
-Cube::Cube(glm::vec3 position, glm::vec3 scale, glm::mat4 transform, int shader, int id) {
+    GLfloat CubeVerticies[] = {
+    -1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f, 1.0f,
+    -1.0f,-1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    -1.0f,-1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f,-1.0f,
+    1.0f,-1.0f,-1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f,-1.0f,
+    -1.0f, 1.0f,-1.0f,
+    1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f,-1.0f,
+    -1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f, 1.0f,
+    1.0f,-1.0f, 1.0f
+    };
 
     face_count = 3 * 12;
     this->position = position;
@@ -86,17 +87,57 @@ Cube::Cube(glm::vec3 position, glm::vec3 scale, glm::mat4 transform, int shader,
     this->transform = transform;
     this->id = id;
 
+    shape_data = new GLfloat[face_count * 3];
+    memcpy(shape_data, CubeVerticies, sizeof(GLfloat) * face_count * 3);
+
+    color_data = new GLfloat[face_count * 3];
+    memcpy(color_data, CubeColors, sizeof(GLfloat) * face_count * 3);
+
+    normal_data = new GLfloat[face_count * 3];
+
+    for (unsigned int i = 0; i < (face_count * 3) - 9; i += 9)
+    {
+        glm::vec3 one;
+        one.x = shape_data[i];
+        one.y = shape_data[i + 1];
+        one.z = shape_data[i + 2];
+
+        glm::vec3 two;
+        two.x = shape_data[i + 3];
+        two.y = shape_data[i + 4];
+        two.z = shape_data[i + 5];
+
+        glm::vec3 three;
+        three.x = shape_data[i + 6];
+        three.y = shape_data[i + 7];
+        three.z = shape_data[i + 8];
+
+        glm::vec3 point = Util::calc_normal(one, two, three);
+
+        normal_data[i]     = point.x;
+        normal_data[i + 1] = point.y;
+        normal_data[i + 2] = point.z;
+
+        normal_data[i + 3] = point.x;
+        normal_data[i + 4] = point.y;
+        normal_data[i + 5] = point.z;
+
+        normal_data[i + 6] = point.x;
+        normal_data[i + 7] = point.y;
+        normal_data[i + 8] = point.z;
+    }
+
     MatrixID      = glGetUniformLocation(shader, "MVP");
     ViewMatrixID  = glGetUniformLocation(shader, "V");
     ModelMatrixID = glGetUniformLocation(shader, "M");
 
     glGenBuffers(1, &verticies);
     glBindBuffer(GL_ARRAY_BUFFER, verticies);
-    glBufferData(GL_ARRAY_BUFFER, 35 * 3, Primitives::CubeVerticies, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 36 * 3, CubeVerticies, GL_STATIC_DRAW);
 
     glGenBuffers(1, &colors);
     glBindBuffer(GL_ARRAY_BUFFER, colors);
-    glBufferData(GL_ARRAY_BUFFER, 35 * 3, Primitives::CubeColors, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 36 * 3, CubeColors, GL_STATIC_DRAW);
 
     glGenBuffers(1, &normals);
     glBindBuffer(GL_ARRAY_BUFFER, normals);

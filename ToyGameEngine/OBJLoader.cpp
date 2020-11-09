@@ -11,45 +11,6 @@ OBJLoader::OBJLoader() {
 OBJLoader::~OBJLoader() {
 }
 
-glm::vec3 OBJLoader::calcNormal(glm::vec3 one, glm::vec3 two, glm::vec3 three)
-{
-	glm::vec3 retVal(0, 0, 0);
-
-	one   = normalize(one);
-	two   = normalize(two);
-	three = normalize(three);
-
-	glm::vec3 edgeOne(0, 0, 0);
-	glm::vec3 edgeTwo(0, 0, 0);
-
-	// Calc Edges
-	edgeOne = two - one;
-	edgeTwo = three - one;
-
-	edgeOne = normalize(edgeOne);
-	edgeTwo = normalize(edgeTwo);
-
-	// Cross Product
-	retVal = glm::cross(edgeOne, edgeTwo);
-
-	retVal = normalize(retVal);
-
-	return retVal;
-}
-
-// Wrapper function to make sure that a 0 vector does not
-//  get passed in
-glm::vec3 OBJLoader::normalize(glm::vec3 vec) {
-
-	glm::vec3 retVal = vec;
-
-	if (vec != glm::vec3(0, 0, 0)) {
-		retVal = glm::normalize(vec);
-	}
-
-	return retVal;
-}
-
 bool OBJLoader::open_file(string path) {
 
 	bool retVal = true;

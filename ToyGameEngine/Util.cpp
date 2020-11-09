@@ -1,6 +1,6 @@
 #include "Util.h"
 
-GLuint Util::loadShaders(const char* vertex_file_path, const char* fragment_file_path)
+GLuint Util::load_shaders(const char* vertex_file_path, const char* fragment_file_path)
 {
 	using namespace std;
 
@@ -93,4 +93,43 @@ GLuint Util::loadShaders(const char* vertex_file_path, const char* fragment_file
 	glDeleteShader(FragmentShaderID);
 
 	return ProgramID;
+}
+
+glm::vec3 Util::calc_normal(glm::vec3 one, glm::vec3 two, glm::vec3 three)
+{
+	glm::vec3 retVal(0, 0, 0);
+
+	one   = normalize(one);
+	two   = normalize(two);
+	three = normalize(three);
+
+	glm::vec3 edgeOne(0, 0, 0);
+	glm::vec3 edgeTwo(0, 0, 0);
+
+	// Calc Edges
+	edgeOne = two - one;
+	edgeTwo = three - one;
+
+	edgeOne = normalize(edgeOne);
+	edgeTwo = normalize(edgeTwo);
+
+	// Cross Product
+	retVal = glm::cross(edgeOne, edgeTwo);
+
+	retVal = normalize(retVal);
+
+	return retVal;
+}
+
+// Wrapper function to make sure that a 0 vector does not
+//  get passed in
+glm::vec3 Util::normalize(glm::vec3 vec) {
+
+	glm::vec3 retVal = vec;
+
+	if (vec != glm::vec3(0, 0, 0)) {
+		retVal = glm::normalize(vec);
+	}
+
+	return retVal;
 }

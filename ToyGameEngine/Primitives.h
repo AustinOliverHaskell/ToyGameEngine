@@ -11,8 +11,7 @@
 class Primitives {
 
 public:
-    static const GLfloat CubeVerticies[];
-    static const GLfloat CubeColors[];
+
 };
 
 class Cube : Renderable {

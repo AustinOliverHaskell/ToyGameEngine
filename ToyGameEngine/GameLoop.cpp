@@ -44,8 +44,8 @@ void GameLoop::on_press(int key)
 	}
 }
 
-void GameLoop::on_release(int key)
+void GameLoop::mouse_position_changed(double xpos, double ypos)
 {
-	
+	printf("Mouse is at position %f, %f \r\n", xpos, ypos);
 }
 
