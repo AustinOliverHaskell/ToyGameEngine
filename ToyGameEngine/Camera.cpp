@@ -1,5 +1,6 @@
 #include "Camera.h"
 
+#include <iostream>
 #include <glm\ext.hpp>
 
 #define ASPECT_RATIO 16.0f/9.0f
@@ -21,6 +22,15 @@ Camera::Camera(glm::vec3 pos, float fov, float h_angle, float v_angle)
 Camera::~Camera() { }
 
 void Camera::calculate_matricies() {
+
+	#define PI 3.14f
+	if (vertical_angle > PI / 2) {
+		vertical_angle = PI / 2;
+	}
+	else if (vertical_angle < -PI / 2) {
+		vertical_angle = -PI / 2;
+	}
+
 	glm::vec3 direction(
 		cos(vertical_angle) * sin(horizontal_angle),
 		sin(vertical_angle),
@@ -45,6 +55,8 @@ void Camera::calculate_matricies() {
 }
 
 void Camera::mouse_position_changed(double xpos, double ypos, double prev_xpos, double prev_ypos) {
+	std::cout << "Camera diff of " << (xpos - prev_xpos) << ", " << (ypos - prev_ypos) << std::endl;
+
 	horizontal_angle += MOUSE_SPEED * (xpos - prev_xpos);
 	vertical_angle   += MOUSE_SPEED * (ypos - prev_ypos);
 }

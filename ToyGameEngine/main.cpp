@@ -69,7 +69,7 @@ int main(void) {
 	GLuint shader = Util::load_shaders(vertex.c_str(), fragment.c_str());
 
 	glm::vec3 camera_position(0, 0, 0);
-	Camera* camera = new Camera(camera_position);
+	Camera* camera = new Camera(camera_position, 45, 180, 180);
 	Renderer* renderer = new Renderer(camera);
 
 	GameLoop game_loop(window, renderer);
@@ -77,7 +77,7 @@ int main(void) {
 	input->add_listener((InputCallback*)&game_loop);
 	input->add_listener((InputCallback*)camera);
 
-	glm::vec3 cube_position(-1, -1, -1);
+	glm::vec3 cube_position(0, 0, 0);
 	glm::vec3 cube_scale(1, 1, 1);
 
 	Cube* cube = new Cube(cube_position, 
@@ -86,7 +86,14 @@ int main(void) {
 						  shader,
 						  10);
 
+	Cube* cube2 = new Cube(glm::vec3(1, 1, 1),
+						   cube_scale,
+						   glm::mat4(1.0f),
+						   shader,
+						   11);
+
 	renderer->add_item((Renderable*)cube);
+	renderer->add_item((Renderable*)cube2);
 
 	// TODO: Move this to it's own thread. - Austin Haskell
 	double last_frame_time = glfwGetTime();;

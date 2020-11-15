@@ -1,7 +1,7 @@
 #include "Primitives.h"
 #include "Util.h"
 
-Cube::Cube(glm::vec3 position, glm::vec3 scale, glm::mat4 transform, int shader, int id) {
+Cube::Cube(glm::vec3 position, glm::vec3 _scale, glm::mat4 transform, int shader, int id) {
 
     GLfloat CubeColors[] = {
     0.583f,  0.771f,  0.014f,
@@ -83,8 +83,8 @@ Cube::Cube(glm::vec3 position, glm::vec3 scale, glm::mat4 transform, int shader,
 
     face_count = 3 * 12;
     this->position = position;
-    this->scale = scale;
-    this->transform = transform;
+    this->scale = _scale;
+    this->transform = glm::scale(transform, _scale);;
     this->id = id;
 
     shape_data = new GLfloat[face_count * 3];
